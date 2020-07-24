@@ -1,27 +1,92 @@
 let randomNumber = Math.floor(Math.random() * 10) + 1;
 
-let guessing = true;
-let guesses = 0;
 
-document.getElementById('guess-form').addEventListener("submit", function (e) {
-    playingTheGame();
-    e.preventDefault();
-})
+// Game Value
+let min = 1,
+    max = 10,
+    // Edit?
+    guessing = true,
+    guessesLeft = 3,
+    winningNum = 1;
+
+// UI Elements
+const game = document.querySelector('#game'),
+    results = document.querySelector('#results'),
+    guessBtn = document.querySelector('#guess-btn'),
+    guessInput = document.querySelector("#guess"),
+    minNum = document.querySelector('.min-num'),
+    maxNum = document.querySelector('.max-num');
+
+// Assign UI min and max
+minNum.textContent = min;
+maxNum.textContent = max;
+
+// Listen for guess
+guessBtn.addEventListener("click", function () {
+    let guess = parseInt(guessInput.value)
+
+    // Validate
+    if (isNaN(guess) || guess < min || guess > max) {
+        setMessage(`Please enter a number between ${min} and ${max}`, `red`);
+    }
+    if (guess === winningNum) {
+        // Gme over - won
+
+        // Disabled input
+        guessInput.disabled = true;
+        // Change border color
+        guessInput.style.borderColor = "green";
+        // Set message
+        setMessage(`${winningNum} is correct, YOU WIN!`, `green`)
+    } else {
+        // Wrong number
+        guessesLeft -= 1;
+
+        if (guessesLeft === 0) {
+            // Game over - lost
+
+            // Disabled input
+            guessInput.disabled = true;
+            // Change border color
+            guessInput.style.borderColor = "red";
+            // Set message
+            setMessage(`Game Over, ${winningNum} was the winning number`, `red`)
+
+        } else {
+            // Game continues - answer wrong
+
+            // Change border color
+            guessInput.style.borderColor = "red";
+
+            // Clear input
+            guessInput.valeu = '';
+            
+            // Set message
+            setMessage(`Guess wrong, you have ${guessesLeft} guesses left`, `red`)
+
+        }
+
+    }
+
+});
 
 
-// UI Variables
-const guess = document.getElementById('guess');
-const result = document.getElementById('results');
-const submit = document.getElementById('submit');
+
+// Set Message
+function setMessage(msg, color) {
+    results.textContent = msg;
+    results.style.color = color;
+};
+
 
 
 function playingTheGame() {
     if (guessing === false) {
-        guesses = 0;
-        submit.value = "Submit";
+        guessesLeft = 0;
+        guessBtn.value = "Submit";
         guess.disabled = false;
         guess.value = "";
-        result.innerText = "";
+        results.innerText = "";
         guessing = true;
         randomNumber = Math.floor(Math.random() * 10) + 1;
     } else {
@@ -29,27 +94,30 @@ function playingTheGame() {
     }
 }
 
-
+// Check if won
 function compareGuess() {
     if (+guess.value === randomNumber) {
-        result.innerText = randomNumber + " is correct!";
-        result.style.color = "green";
+        // Set message
+        results.innerText = randomNumber + " is correct!";
+        // Change color
+        results.style.color = "green";
+        // Disabled input
         guess.disabled = true;
-        submit.value = "Play Again"
+        guessBtn.value = "Play Again"
         guessing = false;
-    } else if (guesses === 0) {
-        result.innerText = "Try again you have 2 guesses left";
-        result.style.color = "red";
-        guesses += 1;
-    } else if (guesses === 1) {
-        result.innerText = "Try again you have 1 guess left";
-        result.style.color = "red";
-        guesses += 1;
+    } else if (guessesLeft === 0) {
+        results.innerText = "Try again you have 2 guesses left";
+        results.style.color = "red";
+        guessesLeft += 1;
+    } else if (guessesLeft === 1) {
+        results.innerText = "Try again you have 1 guess left";
+        results.style.color = "red";
+        guessesLeft += 1;
     } else {
-        result.innerText = "Game over bro";
-        result.style.color = "red";
+        results.innerText = "Game over bro";
+        results.style.color = "red";
         guess.disabled = true;
-        submit.value = "Try Again"
+        guessBtn.value = "Try Again"
         guessing = false;
     }
 }

@@ -16,24 +16,14 @@
         <div class="row">
             <div class="col-md-6">
                 <!--Card-->
-                <div class="card card-body text-center bg-bright mt-5">
+                <div class="card card-body text-center bg-bright mt-5" id="game">
                     <h1 class="heading display-5">Number Guesser</h1>
-                    <p>Guess a number between 1 and 10</p>
-                    <!--Form-->
-                    <form id="guess-form">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input type="number" class="form-control" placeholder="Enter Your Guess..." id="guess">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Submit" class="btn btn-dark" id="submit">
-                        </div>
-                    </form>
-                    <div class="form-group">
-                        <h5 id="results"></h5>
+                    <p>Guess a number between <span class="min-num"></span> and <span class="max-num"></span></p>
+                    <div class="input-group">
+                        <input type="number" class="form-control" placeholder="Enter Your Guess..." id="guess">
                     </div>
-
+                    <input type="submit" value="Submit" class="btn btn-dark" id="guess-btn">
+                    <h5 id="results"></h5>
                 </div>
             </div>
         </div>
