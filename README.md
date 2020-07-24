@@ -1,6 +1,6 @@
 # Number Guesser
 
-![Number Guesser]()
+![Number Guesser](https://i.postimg.cc/6qQ13fCR/Number-Guesser.jpg)
 
 # Tools used
 
