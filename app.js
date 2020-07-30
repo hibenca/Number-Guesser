@@ -1,13 +1,10 @@
-let randomNumber = Math.floor(Math.random() * 10) + 1;
-
+/* Number Guesser Game */
 
 // Game Value
 let min = 1,
     max = 10,
-    // Edit?
-    guessing = true,
     guessesLeft = 3,
-    winningNum = 1;
+    winningNum = getRandomNum(min, max);
 
 // UI Elements
 const game = document.querySelector('#game'),
@@ -21,16 +18,24 @@ const game = document.querySelector('#game'),
 minNum.textContent = min;
 maxNum.textContent = max;
 
+// Listen for play again
+game.addEventListener("mousedown", function(e) {
+    if (e.target.classList.contains('play-again')) {
+        window.location.reload();
+    }
+});
+
 // Listen for guess
 guessBtn.addEventListener("click", function () {
-    let guess = parseInt(guessInput.value)
+    let guess = parseInt(guessInput.value);
 
     // Validate
     if (isNaN(guess) || guess < min || guess > max) {
-        setMessage(`Please enter a number between ${min} and ${max}`, `red`);
+        return setMessage(`Please enter a number between ${min} and ${max}`, `red`);
     }
+    // Check if won
     if (guess === winningNum) {
-        // Gme over - won
+        // Game over - won
         gameOver(true, `${winningNum} is correct, YOU WIN!`);
 
     } else {
@@ -39,7 +44,7 @@ guessBtn.addEventListener("click", function () {
 
         if (guessesLeft === 0) {
             // Game over - lost
-        gameOver(false, `Game over, you lost. The correct number was ${winningNum}`)
+            gameOver(false, `Game over, you lost. The correct number was ${winningNum}`);
         } else {
             // Game continues - answer wrong
 
@@ -47,15 +52,12 @@ guessBtn.addEventListener("click", function () {
             guessInput.style.borderColor = "red";
 
             // Clear input
-            guessInput.valeu = '';
+            guessInput.value = '';
 
             // Set message
-            setMessage(`Guess wrong, you have ${guessesLeft} guesses left`, `red`)
-
+            setMessage(`Guess wrong, you have ${guessesLeft} guesses left`, `red`);
         }
-
     }
-
 });
 
 // Game over
@@ -71,8 +73,15 @@ function gameOver(won, msg) {
     results.style.color = color;
     // Set message
     setMessage(msg)
+    // Play again
+    guessBtn.value = "Play Again";
+    guessBtn.className += " play-again";
 }
 
+// Get Random Number
+function getRandomNum(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 
 // Set Message
@@ -80,47 +89,3 @@ function setMessage(msg, color) {
     results.textContent = msg;
     results.style.color = color;
 };
-
-
-
-function playingTheGame() {
-    if (guessing === false) {
-        guessesLeft = 0;
-        guessBtn.value = "Submit";
-        guess.disabled = false;
-        guess.value = "";
-        results.innerText = "";
-        guessing = true;
-        randomNumber = Math.floor(Math.random() * 10) + 1;
-    } else {
-        compareGuess();
-    }
-}
-
-// Check if won
-function compareGuess() {
-    if (+guess.value === randomNumber) {
-        // Set message
-        results.innerText = randomNumber + " is correct!";
-        // Change color
-        results.style.color = "green";
-        // Disabled input
-        guess.disabled = true;
-        guessBtn.value = "Play Again"
-        guessing = false;
-    } else if (guessesLeft === 0) {
-        results.innerText = "Try again you have 2 guesses left";
-        results.style.color = "red";
-        guessesLeft += 1;
-    } else if (guessesLeft === 1) {
-        results.innerText = "Try again you have 1 guess left";
-        results.style.color = "red";
-        guessesLeft += 1;
-    } else {
-        results.innerText = "Game over bro";
-        results.style.color = "red";
-        guess.disabled = true;
-        guessBtn.value = "Try Again"
-        guessing = false;
-    }
-}
